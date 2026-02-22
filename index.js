@@ -10,6 +10,7 @@ const jobs = [
 ];
 
 
+let currentTab = "all";
 const container = document.getElementById("jobsContainer");
 
 // render all jobs and show in UI
@@ -23,7 +24,18 @@ function renderJobs(){
         // create new card div
         const card = document.createElement("div");
         card.className = "bg-white shadow rounded-xl p-6";
-        
+
+        // badge button status change and add styles
+        let statusBadge = "";
+        if(status === "not-applied"){
+            statusBadge = `<span class="px-3 py-1 text-sm bg-gray-200 rounded">Not Applied</span>`;
+        }
+        if(status === "interview"){
+            statusBadge = `<span class="px-3 py-1 text-sm bg-green-500 text-white rounded">Interview</span>`;
+        }
+        if(status === "rejected"){
+            statusBadge = `<span class="px-3 py-1 text-sm bg-red-500 text-white rounded">Rejected</span>`;
+        }
 
         card.innerHTML = `
         <div class="flex justify-between">
@@ -35,7 +47,7 @@ function renderJobs(){
             <button onclick="deleteJob(${id})" class="text-red-500 font-bold">✕</button>
         </div>
 
-        <div class="mt-3">${status}</div>
+        <div class="mt-3">${statusBadge}</div>
         <p class="mt-3 text-gray-600">${description}</p>
 
         <div class="mt-4 flex gap-3">
@@ -49,12 +61,35 @@ function renderJobs(){
 };
 
 // click and change job status
-function updateStatus(id){
+function updateStatus(id, status){
     // console.log('btn clicked');
     const job = jobs.find(j => j.id === id);
     // console.log(job);
 
-    
+    if(job.status === status){
+        job.status = "not-applied";
+    }else{
+        job.status = status;
+    }
+
+    renderJobs();
 }
+
+
+// find all tap button by class name
+
+// document.querySelectorAll(".tab-btn").forEach(btn=>{
+//     btn.addEventListener("click",function(){
+//         document.querySelectorAll(".tab-btn").forEach(b=>{
+//             b.classList.remove("bg-blue-600","text-white");
+//             b.classList.add("bg-gray-200");
+//         });
+//         this.classList.add("bg-blue-600","text-white");
+//         this.classList.remove("bg-gray-200");
+
+//         currentTab = this.dataset.tab;
+//         renderJobs();
+//     });
+// });
 
 renderJobs();
