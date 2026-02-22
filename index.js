@@ -1,3 +1,5 @@
+
+
 const jobs = [
 { id:1, company:"TechNova Ltd", position:"Frontend Developer", location:"Remote", type:"Full-time", salary:"$80k - $100k", description:"Build responsive user interfaces for global products.", status:"not-applied"},
 { id:2, company:"CloudSync", position:"Backend Engineer", location:"Dhaka", type:"Full-time", salary:"$90k - $110k", description:"Develop scalable backend systems and APIs.", status:"not-applied"},
@@ -9,3 +11,17 @@ const jobs = [
 { id:8, company:"AI Dynamics", position:"ML Engineer", location:"Dhaka", type:"Full-time", salary:"$110k - $150k", description:"Develop machine learning models.", status:"not-applied"}
 ];
 
+
+const container = document.getElementById("jobsContainer");
+
+function renderJobs(){
+    const card = document.createElement("div");
+    card.className = "bg-white shadow rounded-xl p-6";
+
+    jobs.map(job => {
+        console.log(job);
+    })
+}
+
+
+renderJobs();
