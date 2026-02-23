@@ -62,9 +62,7 @@ function renderJobs(){
 
 // click and change job status
 function updateStatus(id, status){
-    // console.log('btn clicked');
     const job = jobs.find(j => j.id === id);
-    // console.log(job);
 
     if(job.status === status){
         job.status = "not-applied";
@@ -77,6 +75,22 @@ function updateStatus(id, status){
 
 
 // find all tap button by class name
+document.querySelectorAll(".tab-btn").forEach(btn => {
+    btn.addEventListener("click", function(){
+        // remove style all button without curren clicked btn
+        document.querySelectorAll(".tab-btn").forEach(b => {
+            b.classList.remove('bg-blue-600', 'text-white');
+            b.classList.add('bg-gray-200');
+        });
+        
+        // add style only clicked button without unclicked btn
+        this.classList.add('bg-blue-600', 'text-white');
+        this.classList.remove('bg-gray-200');
+
+        // select current tab from take data-tab attribute of current target btn
+        console.log(currentTab = this.dataset.tab);
+    });
+});
 
 // document.querySelectorAll(".tab-btn").forEach(btn=>{
 //     btn.addEventListener("click",function(){
