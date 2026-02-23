@@ -1,12 +1,12 @@
 const jobs = [
-{ id:1, company:"TechNova Ltd", position:"Frontend Developer", location:"Remote", type:"Full-time", salary:"$80k - $100k", description:"Build responsive user interfaces for global products.", status:"not-applied"},
-{ id:2, company:"CloudSync", position:"Backend Engineer", location:"Dhaka", type:"Full-time", salary:"$90k - $110k", description:"Develop scalable backend systems and APIs.", status:"not-applied"},
-{ id:3, company:"PixelCraft", position:"UI/UX Designer", location:"Chittagong", type:"Part-time", salary:"$50k - $70k", description:"Design intuitive user experiences for web apps.", status:"not-applied"},
-{ id:4, company:"DataBridge", position:"Data Analyst", location:"Remote", type:"Contract", salary:"$60k - $85k", description:"Analyze business metrics and performance data.", status:"not-applied"},
-{ id:5, company:"CyberCore", position:"Security Specialist", location:"Dhaka", type:"Full-time", salary:"$95k - $120k", description:"Maintain security protocols and compliance.", status:"not-applied"},
-{ id:6, company:"BrightApps", position:"Mobile Developer", location:"Sylhet", type:"Full-time", salary:"$75k - $95k", description:"Create Android and iOS applications.", status:"not-applied"},
-{ id:7, company:"WebFusion", position:"Full Stack Developer", location:"Remote", type:"Full-time", salary:"$100k - $130k", description:"Work across frontend and backend stacks.", status:"not-applied"},
-{ id:8, company:"AI Dynamics", position:"ML Engineer", location:"Dhaka", type:"Full-time", salary:"$110k - $150k", description:"Develop machine learning models.", status:"not-applied"}
+{ id:1, company:"TechNova Ltd", position:"Frontend Developer", location:"Remote", type:"Full-time", salary:"$80k - $100k", description:"Build responsive user interfaces for global products.", status:"not applied"},
+{ id:2, company:"CloudSync", position:"Backend Engineer", location:"Dhaka", type:"Full-time", salary:"$90k - $110k", description:"Develop scalable backend systems and APIs.", status:"not applied"},
+{ id:3, company:"PixelCraft", position:"UI/UX Designer", location:"Chittagong", type:"Part-time", salary:"$50k - $70k", description:"Design intuitive user experiences for web apps.", status:"not applied"},
+{ id:4, company:"DataBridge", position:"Data Analyst", location:"Remote", type:"Contract", salary:"$60k - $85k", description:"Analyze business metrics and performance data.", status:"not applied"},
+{ id:5, company:"CyberCore", position:"Security Specialist", location:"Dhaka", type:"Full-time", salary:"$95k - $120k", description:"Maintain security protocols and compliance.", status:"not applied"},
+{ id:6, company:"BrightApps", position:"Mobile Developer", location:"Sylhet", type:"Full-time", salary:"$75k - $95k", description:"Create Android and iOS applications.", status:"not applied"},
+{ id:7, company:"WebFusion", position:"Full Stack Developer", location:"Remote", type:"Full-time", salary:"$100k - $130k", description:"Work across frontend and backend stacks.", status:"not applied"},
+{ id:8, company:"AI Dynamics", position:"ML Engineer", location:"Dhaka", type:"Full-time", salary:"$110k - $150k", description:"Develop machine learning models.", status:"not applied"}
 ];
 
 
@@ -17,8 +17,31 @@ const container = document.getElementById("jobsContainer");
 function renderJobs(){
     container.innerHTML = "";
 
+    // now data rendering condition add
+    let filtered;
+    if(currentTab === 'all'){
+        filtered = jobs;
+        // add data of jobs length by id
+        document.getElementById('tabCount').innerText = `${jobs.length} jobs`;
+    }else{
+        // filter by currentTab and show jobs of interview or rejected
+        filtered = jobs.filter(job => job.status === currentTab);
+        // add data of jobs length by id
+        document.getElementById('tabCount').innerText = `${filtered.length} / ${jobs.length} jobs`;
+    }
+
+    // jobs length is zero then show
+    if(filtered.length === 0){
+        container.innerHTML = `
+        <div class="bg-white shadow rounded-xl p-10 text-center">
+            <div class="mb-4 flex justify-center"><img class="w-14" src="./jobs.png"></div>
+            <h3 class="text-xl font-semibold">No jobs available</h3>
+            <p class="text-gray-500 mt-2">There are no jobs in this category.</p>
+        </div>`;
+        return;
+    }
     
-    jobs.forEach(job => {
+    filtered.forEach(job => {
         const {id, company, position, location, type, salary, description, status} = job;
 
         // create new card div
@@ -27,7 +50,7 @@ function renderJobs(){
 
         // badge button status change and add styles
         let statusBadge = "";
-        if(status === "not-applied"){
+        if(status === "not applied"){
             statusBadge = `<span class="px-3 py-1 text-sm bg-gray-200 rounded">Not Applied</span>`;
         }
         if(status === "interview"){
@@ -65,11 +88,12 @@ function updateStatus(id, status){
     const job = jobs.find(j => j.id === id);
 
     if(job.status === status){
-        job.status = "not-applied";
+        job.status = "not applied";
     }else{
         job.status = status;
     }
 
+    updateDashboard();
     renderJobs();
 }
 
@@ -89,21 +113,16 @@ document.querySelectorAll(".tab-btn").forEach(btn => {
 
         // select current tab from take data-tab attribute of current target btn
         console.log(currentTab = this.dataset.tab);
+        renderJobs();
     });
 });
 
-// document.querySelectorAll(".tab-btn").forEach(btn=>{
-//     btn.addEventListener("click",function(){
-//         document.querySelectorAll(".tab-btn").forEach(b=>{
-//             b.classList.remove("bg-blue-600","text-white");
-//             b.classList.add("bg-gray-200");
-//         });
-//         this.classList.add("bg-blue-600","text-white");
-//         this.classList.remove("bg-gray-200");
+// dashboard job count add for all, interview and rejected
+function updateDashboard(){
+    document.getElementById('totalCount').innerText = jobs.length;
+    document.getElementById('interviewCount').innerText = jobs.filter(job => job.status === 'interview').length;
+    document.getElementById('rejectedCount').innerText = jobs.filter(job => job.status === 'rejected').length;
+}
 
-//         currentTab = this.dataset.tab;
-//         renderJobs();
-//     });
-// });
-
+updateDashboard();
 renderJobs();
