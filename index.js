@@ -61,13 +61,13 @@ function renderJobs(){
         }
 
         card.innerHTML = `
-        <div class="flex justify-between">
+        <div class="flex justify-between items-start">
             <div>
                 <h3 class="font-bold text-lg">${company}</h3>
                 <p class="text-gray-700">${position}</p>
                 <p class="text-sm text-gray-500">${location} • ${type} • ${salary}</p>
             </div>
-            <button onclick="deleteJob(${id})" class="text-red-500 font-bold">✕</button>
+            <button onclick="deleteJob(${id})" class="text-gray-500 font-bold"><i class="fa-solid fa-trash-can"></i></button>
         </div>
 
         <div class="mt-3">${statusBadge}</div>
@@ -112,7 +112,7 @@ document.querySelectorAll(".tab-btn").forEach(btn => {
         this.classList.remove('bg-gray-200');
 
         // select current tab from take data-tab attribute of current target btn
-        console.log(currentTab = this.dataset.tab);
+        currentTab = this.dataset.tab;
         renderJobs();
     });
 });
@@ -122,6 +122,15 @@ function updateDashboard(){
     document.getElementById('totalCount').innerText = jobs.length;
     document.getElementById('interviewCount').innerText = jobs.filter(job => job.status === 'interview').length;
     document.getElementById('rejectedCount').innerText = jobs.filter(job => job.status === 'rejected').length;
+}
+
+// delete job using by id find index and apply splice
+function deleteJob(id) {
+    const index = jobs.findIndex(job => job.id === id);
+    jobs.splice(index, 1);
+
+    updateDashboard();
+    renderJobs();
 }
 
 updateDashboard();
